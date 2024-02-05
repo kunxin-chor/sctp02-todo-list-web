@@ -1,3 +1,9 @@
+// We need 1) JSON BIN ID and the base JSON BIN API URL
+const BIN_ID="65c05860dc74654018a05f54";
+const BASE_JSON_BIN_URL="https://api.jsonbin.io/v3/b";
+// not a good idea to embed the master key in data.js
+const MASTER_KEY="$2a$10$EZfkhAp55cb1nD3GBqXbaeHPg.9VYRj2u4mWKFwEIbVtER1wGdiNy";
+
 function createTask(todos, name, urgency) {
 
     const newTask = {
@@ -41,4 +47,21 @@ function deleteTask(todos, id) {
         // parameter2 : how many to delete
         todos.splice(wantedIndex, 1);
     }
+}
+
+async function loadTasks() {
+    const response = await axios.get(`${BASE_JSON_BIN_URL}/${BIN_ID}/latest`);
+    console.log(response.data);
+    return response.data.record;
+}
+
+async function saveTasks(todos) {
+    // first parameter: the URL (aka the endpoint)
+    // second parameter: new data which will overrwrite the existing one
+    // third parameter: header options (stores meta data)
+    const response = await axios.put(`${BASE_JSON_BIN_URL}/${BIN_ID}`, todos,{
+        'Content-Type':"application/json",  // inform JSON BIN API that we are sending something in JSON format
+        'X-Master-Key': MASTER_KEY, // provide the credientals to update the JSON BIN
+    })
+    return response.data;
 }

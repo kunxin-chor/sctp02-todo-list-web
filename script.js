@@ -1,12 +1,12 @@
 // main() is the entry point
-function main() {
-    let todos= [];  // this array will store all our todos
+async function main() {
+    let todos= await loadTasks();
 
 
     // create some sample data to test displaying the list of tasks
-    createTask(todos, "Walk the dog", "medium");
-    createTask(todos, "Wash the car", "low");
-    createTask(todos, "Clean the bathroom", "high");
+    // createTask(todos, "Walk the dog", "medium");
+    // createTask(todos, "Wash the car", "low");
+    // createTask(todos, "Clean the bathroom", "high");
 
     // display all the tasks for the first time
     renderTodos(todos);
@@ -21,6 +21,12 @@ function main() {
         renderTodos(todos);
 
     });
+
+    const saveButton = document.querySelector("#saveBtn");
+    saveButton.addEventListener("click", async function(){
+        await saveTasks(todos);
+        alert("Changes have been saved")
+    })
 }
 
 function getBadgeColor(urgency) {
